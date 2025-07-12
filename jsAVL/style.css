@@ -1,0 +1,90 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Fondo general */
+body {
+  background-color: #f4f6f8;
+  padding: 30px;
+  text-align: center;
+}
+
+/* Título principal */
+h1 {
+  color: #2c3e50;
+  margin-bottom: 25px;
+}
+
+/* Controles superiores */
+.controls {
+  margin-bottom: 20px;
+}
+
+.controls input {
+  padding: 10px;
+  width: 180px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-right: 10px;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.controls input:focus {
+  border-color: #1976d2;
+}
+
+.controls button {
+  padding: 10px 15px;
+  background-color: #1976d2;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 15px;
+  margin: 5px;
+}
+
+.controls button:hover {
+  background-color: #1565c0;
+}
+
+/* Canvas */
+canvas {
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  display: block;
+  margin: 0 auto 25px;
+}
+
+/* Área de explicación */
+#explicacion {
+  background-color: #e8f0fe;
+  border-left: 6px solid #2196f3;
+  padding: 15px;
+  font-size: 16px;
+  width: 70%;
+  margin: 0 auto;
+  border-radius: 8px;
+  transition: background-color 0.5s;
+}
+
+/* Historial */
+#historial {
+  width: 70%;
+  margin: 0 auto;
+  text-align: left;
+  padding-top: 15px;
+  border-top: 1px solid #ddd;
+  font-family: monospace;
+  max-height: 200px;
+  overflow-y: auto;
+}

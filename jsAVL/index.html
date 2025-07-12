@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Simulador Árbol AVL</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Simulador de Árbol AVL</h1>
+
+  <div class="controls">
+    <input type="number" id="valor" placeholder="Ingrese valor">
+    <button onclick="insertarAVL()">Insertar</button>
+    <button onclick="eliminarAVL()">Eliminar</button>
+    <button onclick="buscarAVL()">Buscar</button>
+    <button onclick="eliminarTodoAVL()">Eliminar todo</button>
+  </div>
+
+  <canvas id="canvas-avl" width="1000" height="500"></canvas>
+
+  <div id="explicacion">Esperando acción...</div>
+  <div id="historial" style="margin-top: 20px; font-size: 14px; color: gray;"></div>
+
+  <script src="arbolAVL.js"></script>
+</body>
+</html>

@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+  <html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Simulador de Árbol Binario de Búsqueda</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        text-align: center;
+      }
+      #formulario input, #formulario button {
+        margin: 5px;
+        padding: 8px 12px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+      #formulario input {
+        border: 1px solid #ccc;
+        padding: 8px;
+        width: 120px;
+      }
+      #formulario button {
+        background-color: #4CAF50;
+        color: white;
+      }
+      #formulario button:hover {
+        opacity: 0.9;
+        transform: translateY(-2px);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      }
+      #btnLimpiar {
+        background-color: #ff6b6b;
+      }
+      #explicacion {
+        margin-top: 20px;
+        font-weight: bold;
+        color: #333;
+        white-space: pre-line;
+        min-height: 40px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background-color: #f8f8f8;
+      }
+      svg {
+        border: 1px solid #ccc;
+        margin-top: 20px;
+        background-color: #f9f9f9;
+      }
+      .node {
+        fill: lightblue;
+        stroke: #000;
+        stroke-width: 1px;
+        transition: fill 0.3s;
+      }
+      .node.new {
+        fill: #aaffaa;
+      }
+      .node.visited {
+        fill: orange;
+      }
+      .node.removed {
+        fill: #ffaaaa;
+      }
+      .text {
+        font-size: 12px;
+        pointer-events: none;
+        font-weight: bold;
+      }
+      .line {
+        transition: all 0.5s;
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+      @keyframes scaleIn {
+        from { transform: scale(0); }
+        to { transform: scale(1); }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Simulador de Árbol Binario de Búsqueda</h1>
+    <div id="formulario">
+      <input type="number" id="valor" placeholder="Valor" />
+      <button onclick="insertar()">Insertar</button>
+      <button onclick="eliminar()">Eliminar</button>
+      <button onclick="buscar()">Buscar</button>
+      <button id="btnLimpiar" onclick="limpiarTodo()">Limpiar Todo</button>
+    </div>
+
+    <div id="explicacion"></div>
+    <svg id="canvas" width="1000" height="500"></svg>
+
+    <script>
+      class Nodo {
+        constructor(valor) {
+          this.valor = valor;
+          this.izq = null;
+          this.der = null;
+          this.x = 0;
+          this.y = 0;
+          this.visited = false;
+          this.new = false;
+          this.removed = false;
+        }
+      }
+
+      class BST {
+        constructor() {
+          this.raiz = null;
+          this.animationSpeed = 500;
+        }
+
+        insertar(valor) {
+          this.raiz = this._insertarRec(this.raiz, valor);
+          explicar(`Se insertó el valor ${valor} en el árbol.`);
+        }
+
+        _insertarRec(nodo, valor) {
+          if (nodo == null) {
+            const nuevoNodo = new Nodo(valor);
+            nuevoNodo.new = true;
+            return nuevoNodo;
+          }
+          if (valor < nodo.valor) nodo.izq = this._insertarRec(nodo.izq, valor);
+          else if (valor > nodo.valor) nodo.der = this._insertarRec(nodo.der, valor);
+          else explicar(`El valor ${valor} ya existe en el árbol.`);
+          return nodo;
+        }
+
+        eliminar(valor) {
+          this.raiz = this._eliminarRec(this.raiz, valor);
+        }
+
+        _eliminarRec(nodo, valor, esReemplazo = false) {
+          if (nodo == null) {
+            if (!esReemplazo) explicar(`El valor ${valor} no se encontró en el árbol.`);
+            return null;
+          } else if (valor < nodo.valor) {
+            nodo.izq = this._eliminarRec(nodo.izq, valor, esReemplazo);
+          } else if (valor > nodo.valor) {
+            nodo.der = this._eliminarRec(nodo.der, valor, esReemplazo);
+          } else {
+            if (nodo.izq === null && nodo.der === null) {
+              if (!esReemplazo) {
+                explicar(`Se eliminó la hoja con valor ${valor}.`);
+                nodo.removed = true;
+              }
+              return null;
+            } else if (!nodo.izq) {
+              if (!esReemplazo) {
+                explicar(`Se eliminó el nodo ${valor} con un solo hijo derecho.`);
+                nodo.der.removed = true;
+              }
+              return nodo.der;
+            } else if (!nodo.der) {
+              if (!esReemplazo) {
+                explicar(`Se eliminó el nodo ${valor} con un solo hijo izquierdo.`);
+                nodo.izq.removed = true;
+              }
+              return nodo.izq;
+            } else {
+              let sucesor = this._minValor(nodo.der);
+              explicar(`El nodo ${valor} tiene dos hijos. Se reemplaza por el sucesor (${sucesor.valor}).`);
+              nodo.valor = sucesor.valor;
+              nodo.der = this._eliminarRec(nodo.der, sucesor.valor, true);
+            }
+          }
+          return nodo;
+        }
+
+        _minValor(nodo) {
+          while (nodo.izq) nodo = nodo.izq;
+          return nodo;
+        }
+
+        buscar(valor) {
+          this.resetVisited();
+          let encontrado = this._buscarRec(this.raiz, valor);
+          if (encontrado) {
+            explicar(`El valor ${valor} fue encontrado en el árbol.`);
+          } else {
+            explicar(`El valor ${valor} no está en el árbol.`);
+          }
+          return encontrado;
+        }
+
+        _buscarRec(nodo, valor) {
+          if (nodo == null) return false;
+          nodo.visited = true;
+          if (valor === nodo.valor) return true;
+          if (valor < nodo.valor) return this._buscarRec(nodo.izq, valor);
+          else return this._buscarRec(nodo.der, valor);
+        }
+
+        resetVisited() {
+          this._resetVisitedRec(this.raiz);
+        }
+
+        _resetVisitedRec(nodo) {
+          if (!nodo) return;
+          nodo.visited = false;
+          this._resetVisitedRec(nodo.izq);
+          this._resetVisitedRec(nodo.der);
+        }
+
+        resetNew() {
+          this._resetNewRec(this.raiz);
+        }
+
+        _resetNewRec(nodo) {
+          if (!nodo) return;
+          nodo.new = false;
+          this._resetNewRec(nodo.izq);
+          this._resetNewRec(nodo.der);
+        }
+
+        resetRemoved() {
+          this._resetRemovedRec(this.raiz);
+        }
+
+        _resetRemovedRec(nodo) {
+          if (!nodo) return;
+          nodo.removed = false;
+          this._resetRemovedRec(nodo.izq);
+          this._resetRemovedRec(nodo.der);
+        }
+
+        dibujar(svg) {
+          svg.innerHTML = "";
+          this._posicionar(this.raiz, 500, 40, 250);
+          this._dibujarNodo(svg, this.raiz);
+        }
+
+        _posicionar(nodo, x, y, separacion) {
+          if (!nodo) return;
+          nodo.x = x;
+          nodo.y = y;
+          this._posicionar(nodo.izq, x - separacion, y + 60, separacion / 1.5);
+          this._posicionar(nodo.der, x + separacion, y + 60, separacion / 1.5);
+        }
+
+        _dibujarNodo(svg, nodo) {
+          if (!nodo) return;
+          if (nodo.izq) {
+            this._dibujarLinea(svg, nodo.x, nodo.y, nodo.izq.x, nodo.izq.y);
+            this._dibujarNodo(svg, nodo.izq);
+          }
+          if (nodo.der) {
+            this._dibujarLinea(svg, nodo.x, nodo.y, nodo.der.x, nodo.der.y);
+            this._dibujarNodo(svg, nodo.der);
+          }
+
+          let circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+          circle.setAttribute("cx", nodo.x);
+          circle.setAttribute("cy", nodo.y);
+          circle.setAttribute("r", 20);
+          circle.setAttribute("class", "node");
+          
+          if (nodo.visited) circle.classList.add("visited");
+          if (nodo.new) circle.classList.add("new");
+          if (nodo.removed) circle.classList.add("removed");
+          
+          svg.appendChild(circle);
+
+          let text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+          text.setAttribute("x", nodo.x);
+          text.setAttribute("y", nodo.y + 5);
+          text.setAttribute("text-anchor", "middle");
+          text.setAttribute("class", "text");
+          text.textContent = nodo.valor;
+          svg.appendChild(text);
+
+          if (nodo.new) {
+            circle.style.opacity = "0";
+            circle.style.transform = "scale(0)";
+            circle.animate(
+              [
+                { opacity: 0, transform: "scale(0)" },
+                { opacity: 1, transform: "scale(1)" }
+              ], 
+              {
+                duration: this.animationSpeed,
+                fill: "forwards"
+              }
+            );
+          } else if (nodo.removed) {
+            circle.animate(
+              [
+                { opacity: 1, transform: "scale(1)" },
+                { opacity: 0, transform: "scale(0)" }
+              ], 
+              {
+                duration: this.animationSpeed,
+                fill: "forwards"
+              }
+            );
+          } else {
+            circle.style.opacity = "0";
+            circle.animate(
+              [{ opacity: 0 }, { opacity: 1 }],
+              { duration: this.animationSpeed / 2, fill: "forwards" }
+            );
+          }
+        }
+
+        _dibujarLinea(svg, x1, y1, x2, y2) {
+          let line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+          line.setAttribute("x1", x1);
+          line.setAttribute("y1", y1);
+          line.setAttribute("x2", x2);
+          line.setAttribute("y2", y2);
+          line.setAttribute("stroke", "black");
+          line.setAttribute("class", "line");
+          svg.appendChild(line);
+          
+          line.style.opacity = "0";
+          line.animate(
+            [{ opacity: 0 }, { opacity: 1 }],
+            { duration: this.animationSpeed, fill: "forwards" }
+          );
+        }
+      }
+
+      let arbol = new BST();
+      const svg = document.getElementById("canvas");
+
+      function insertar() {
+        const inputValor = document.getElementById("valor");
+        const valor = parseInt(inputValor.value);
+        if (isNaN(valor)) return alert("Ingresa un número válido.");
+        document.getElementById("explicacion").textContent = "";
+        arbol.resetNew();
+        arbol.resetRemoved();
+        arbol.insertar(valor);
+        arbol.dibujar(svg);
+        inputValor.value = ""; // Limpiar el campo de entrada
+        inputValor.focus(); // Devolver el foco al campo de entrada
+      }
+
+      function eliminar() {
+        const inputValor = document.getElementById("valor");
+        const valor = parseInt(inputValor.value);
+        if (isNaN(valor)) return alert("Ingresa un número válido.");
+        document.getElementById("explicacion").textContent = "";
+        arbol.resetNew();
+        arbol.resetRemoved();
+        arbol.eliminar(valor);
+        arbol.dibujar(svg);
+        inputValor.value = ""; // Limpiar el campo de entrada
+        inputValor.focus(); // Devolver el foco al campo de entrada
+      }
+
+      function buscar() {
+        const inputValor = document.getElementById("valor");
+        const valor = parseInt(inputValor.value);
+        if (isNaN(valor)) return alert("Ingresa un número válido.");
+        document.getElementById("explicacion").textContent = "";
+        arbol.resetNew();
+        arbol.resetRemoved();
+        arbol.buscar(valor);
+        arbol.dibujar(svg);
+        inputValor.value = ""; // Limpiar el campo de entrada
+        inputValor.focus(); // Devolver el foco al campo de entrada
+      }
+
+      function limpiarTodo() {
+        // Animación de desvanecimiento antes de limpiar
+        svg.animate(
+          [{ opacity: 1 }, { opacity: 0 }],
+          { duration: 300, fill: 'forwards' }
+        ).onfinish = () => {
+          arbol = new BST();
+          document.getElementById("explicacion").textContent = "";
+          svg.innerHTML = "";
+          svg.style.opacity = "1";
+          
+          // Limpiar campo de entrada
+          document.getElementById("valor").value = "";
+          document.getElementById("valor").focus();
+        };
+      }
+
+      function explicar(texto) {
+        const area = document.getElementById("explicacion");
+        if (area.textContent === "") {
+          area.textContent = texto;
+        } else {
+          area.textContent += "\n" + texto;
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Árbol B+ Visual</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Visualizador de Árbol B+</h1>
+        
+        <div class="controls">
+            <div class="control-group">
+                <label for="order">Orden del árbol:</label>
+                <select id="order">
+                    <option value="2">2</option>
+                    <option value="3" selected>3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            
+            <div class="control-group">
+                <input type="number" id="valueInput" placeholder="Valor numérico">
+                <button id="insertBtn">Insertar</button>
+                <button id="deleteBtn">Eliminar</button>
+                <button id="searchBtn">Buscar</button>
+                <button id="clearBtn">Limpiar árbol</button>
+            </div>
+            
+            <div class="control-group">
+                <button id="randomBtn">Insertar 10 valores aleatorios</button>
+            </div>
+        </div>
+        
+        <div id="searchResult"></div>
+        
+        <div id="treeVisualization"></div>
+        
+        <div class="legend">
+            <div class="legend-item">
+                <div class="node internal"></div>
+                <span>Nodo interno</span>
+            </div>
+            <div class="legend-item">
+                <div class="node leaf"></div>
+                <span>Nodo hoja</span>
+            </div>
+            <div class="legend-item">
+                <div class="node highlighted"></div>
+                <span>Nodo encontrado</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="bplus-tree.js"></script>
+</body>
+</html>

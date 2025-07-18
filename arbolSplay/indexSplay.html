@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Simulador Árbol Splay</title>
+  <link rel="stylesheet" href="estilosSplay.css" />
+</head>
+<body>
+  <div class="contenedor">
+    <h1>Simulador Árbol Splay</h1>
+    <div class="controles">
+      <input type="number" id="valor" placeholder="Valor" />
+      <button onclick="insertar()">Insertar</button>
+      <button onclick="buscar()">Buscar</button>
+      <button onclick="eliminar()">Eliminar</button>
+      <button onclick="reiniciar()">Reiniciar</button>
+    </div>
+    <div id="explicacion" class="explicacion"></div>
+    <svg id="svg" width="100%" height="600"></svg>
+  </div>
+  <script src="arbolSplay.js"></script>
+</body>
+</html>
+

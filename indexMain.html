@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Simuladores de Árboles - EDA</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #1f4037, #99f2c8);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      color: white;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 30px;
+      font-size: 2.5rem;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    }
+
+    .menu {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      width: 90%;
+      max-width: 800px;
+      padding: 20px;
+    }
+
+    .card {
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 2px solid #ffffff33;
+      border-radius: 15px;
+      padding: 30px 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .card:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+      transform: scale(1.05);
+    }
+
+    .card a {
+      color: white;
+      text-decoration: none;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+
+    footer {
+      margin-top: 40px;
+      font-size: 0.9rem;
+      color: #e0e0e0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Simuladores de Árboles EDA</h1>
+  <div class="menu">
+    <div class="card"><a href="jsAVL/index.html">Árbol AVL</a></div>
+    <div class="card"><a href="bplus-tree/index.html">Árbol B</a></div>
+    <div class="card"><a href="arbolBinarioBusqueda.html">Árbol Binario</a></div>
+    <div class="card"><a href="arbolSplay/indexSplay.html">Árbol Splay</a></div>
+  </div>
+
+  <footer>
+    © 2025 - Proyecto Estructuras de Datos y Algoritmos
+  </footer>
+</body>
+</html>

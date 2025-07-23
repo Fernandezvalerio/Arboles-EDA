@@ -84,7 +84,7 @@
     </style>
   </head>
   <body>
-    <h1>Simulador de Árbol Binario de Búsqueda</h1>
+    <h1>Simulador de Arbol Binario de Busqueda</h1>
     <div id="formulario">
       <input type="number" id="valor" placeholder="Valor" />
       <button onclick="insertar()">Insertar</button>
@@ -118,7 +118,7 @@
 
         insertar(valor) {
           this.raiz = this._insertarRec(this.raiz, valor);
-          explicar(`Se insertó el valor ${valor} en el árbol.`);
+          explicar(`Se inserto el valor ${valor} en el arbol.`);
         }
 
         _insertarRec(nodo, valor) {
@@ -129,7 +129,7 @@
           }
           if (valor < nodo.valor) nodo.izq = this._insertarRec(nodo.izq, valor);
           else if (valor > nodo.valor) nodo.der = this._insertarRec(nodo.der, valor);
-          else explicar(`El valor ${valor} ya existe en el árbol.`);
+          else explicar(`El valor ${valor} ya existe en el arbol.`);
           return nodo;
         }
 
@@ -139,7 +139,7 @@
 
         _eliminarRec(nodo, valor, esReemplazo = false) {
           if (nodo == null) {
-            if (!esReemplazo) explicar(`El valor ${valor} no se encontró en el árbol.`);
+            if (!esReemplazo) explicar(`El valor ${valor} no se encontro en el arbol.`);
             return null;
           } else if (valor < nodo.valor) {
             nodo.izq = this._eliminarRec(nodo.izq, valor, esReemplazo);
@@ -148,19 +148,19 @@
           } else {
             if (nodo.izq === null && nodo.der === null) {
               if (!esReemplazo) {
-                explicar(`Se eliminó la hoja con valor ${valor}.`);
+                explicar(`Se elimino la hoja con valor ${valor}.`);
                 nodo.removed = true;
               }
               return null;
             } else if (!nodo.izq) {
               if (!esReemplazo) {
-                explicar(`Se eliminó el nodo ${valor} con un solo hijo derecho.`);
+                explicar(`Se elimino el nodo ${valor} con un solo hijo derecho.`);
                 nodo.der.removed = true;
               }
               return nodo.der;
             } else if (!nodo.der) {
               if (!esReemplazo) {
-                explicar(`Se eliminó el nodo ${valor} con un solo hijo izquierdo.`);
+                explicar(`Se elimino el nodo ${valor} con un solo hijo izquierdo.`);
                 nodo.izq.removed = true;
               }
               return nodo.izq;
@@ -183,9 +183,9 @@
           this.resetVisited();
           let encontrado = this._buscarRec(this.raiz, valor);
           if (encontrado) {
-            explicar(`El valor ${valor} fue encontrado en el árbol.`);
+            explicar(`El valor ${valor} fue encontrado en el arbol.`);
           } else {
-            explicar(`El valor ${valor} no está en el árbol.`);
+            explicar(`El valor ${valor} no esta en el arbol.`);
           }
           return encontrado;
         }
@@ -333,7 +333,7 @@
       function insertar() {
         const inputValor = document.getElementById("valor");
         const valor = parseInt(inputValor.value);
-        if (isNaN(valor)) return alert("Ingresa un número válido.");
+        if (isNaN(valor)) return alert("Ingresa un numero valido.");
         document.getElementById("explicacion").textContent = "";
         arbol.resetNew();
         arbol.resetRemoved();
@@ -346,7 +346,7 @@
       function eliminar() {
         const inputValor = document.getElementById("valor");
         const valor = parseInt(inputValor.value);
-        if (isNaN(valor)) return alert("Ingresa un número válido.");
+        if (isNaN(valor)) return alert("Ingresa un numero valido.");
         document.getElementById("explicacion").textContent = "";
         arbol.resetNew();
         arbol.resetRemoved();
@@ -359,7 +359,7 @@
       function buscar() {
         const inputValor = document.getElementById("valor");
         const valor = parseInt(inputValor.value);
-        if (isNaN(valor)) return alert("Ingresa un número válido.");
+        if (isNaN(valor)) return alert("Ingresa un numero valido.");
         document.getElementById("explicacion").textContent = "";
         arbol.resetNew();
         arbol.resetRemoved();
